@@ -1,0 +1,12 @@
+1.to create virtual env in conda
+conda create --name [nameofvirtualenv] django
+
+2.to activate 
+activate [nameofvirtualenv]
+
+3.to deactivate
+deactivate [nameofvirtualenv]
+
+4.to list all the envs
+conda info --envs
+

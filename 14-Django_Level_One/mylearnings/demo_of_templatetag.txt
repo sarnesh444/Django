@@ -1,0 +1,15 @@
+template tag in html file
+=========================
+{{ insert_me }}
+
+
+views.py file to dynamically insert text into the html file which has the template tag
+======================================================================================
+from django.shortcuts import render
+def index(request):
+    my_dict = {'insert_me':"Hello I am from views.py!"}
+    return render(request,'first_app/indexOLD.html',context=my_dict)
+
+
+note that key in my_dict is same as the one in the template tag 
+so now the value for the key in my_dict will be inserted into the template tag in html 

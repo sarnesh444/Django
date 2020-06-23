@@ -1,0 +1,16 @@
+installing djano installs a command line tool called django-admin
+
+1.to create project 
+django-admin startproject [nameofproject]
+
+__init__.py =blank file treats this dir as a package
+
+settings.py =has the settings for the project
+
+urls.py =stores all the paths/url patterns for the files
+
+wsgi.py =web server gateway interface
+
+2.to run server
+python manage.py runserver
+

@@ -1,0 +1,30 @@
+from django.urls import path, include 
+
+path=used in project urls.py to specify the end point 
+include=used to include the urls.py from django app into django project
+
+
+
+
+sample urls.py in django project
+
+from django.contrib import admin
+from django.urls import path, include
+from first_app import views
+
+urlpatterns = [
+    path('', views.index, name="index"),
+    path('first_app/', include('first_app.urls')),
+    path('admin/', admin.site.urls),
+]
+
+
+
+sample urls.py in django app
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
