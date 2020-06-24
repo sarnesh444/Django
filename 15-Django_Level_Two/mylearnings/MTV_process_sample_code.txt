@@ -1,0 +1,77 @@
+Step1 &2 :Importing models & Editing the views.py file to use the models
+
+eg.
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Topic,Webpage,AccessRecord #step1:importing models from where we can get data
+
+#querying retrieved data from imported models in views.py 
+def index(request):
+    webpages_list = AccessRecord.objects.order_by('date')
+    date_dict = {"access_records":webpages_list}
+    return render(request,'first_app/index.html',date_dict)
+
+
+Note:access_records in views.py is found in html as well that is the placeholder in html so that dynamic content can be rendered
+
+Step3 & 4:passing the data to html obtained from models that are connected to db
+
+
+eg.
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Django Level Two</title>
+    <link rel="stylesheet" href="{% static "first_app/css/mystyle.css" %}"/>
+  </head>
+  <body>
+    <h1>Hi, welcome to Django Level Two!</h1>
+    <h2>Here are your access records:</h2>
+    <div class="djangtwo">
+      {% if access_records %}
+          <table>
+            <thead>
+              <th>Site Name</th>
+              <th>Date Accessed</th>
+            </thead>
+
+            {% for acc in access_records %}
+              <tr>
+                <td>{{ acc.name }}</td>
+                <td>{{ acc.date }}</td>
+              </tr>
+            {% endfor %}
+        </table>
+
+      {% else %}
+        <p>No Access Records. Table Not Created.</p>
+      {% endif %}
+    </div>
+
+  </body>
+</html>
+
+
+Step 5:Adding views.py in urls
+
+app/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]
+
+
+project/urls.py
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('first_app/', include('first_app.urls')),
+    path('admin/', admin.site.urls),
+]

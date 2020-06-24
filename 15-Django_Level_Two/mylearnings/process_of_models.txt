@@ -1,0 +1,102 @@
+Process of creating models and migrating them to db
+
+1.navigate to the models.py file in django app for which you would like to create a model
+
+*create the model here
+
+*here each class will be a table in SQLite Db
+
+*note that each class extends "models.Model"
+
+eg.
+from django.db import models
+class Topic(models.Model):
+    top_name = models.CharField(max_length=264,unique=True)
+
+    def __str__(self):
+        return self.top_name
+
+class Webpage(models.Model):
+    topic = models.ForeignKey(Topic,on_delete=models.CASCADE)
+    name = models.CharField(max_length=264,unique=True)
+    url = models.URLField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+class AccessRecord(models.Model):
+    name = models.ForeignKey(Webpage,on_delete=models.CASCADE)
+    date = models.DateField()
+
+    def __str__(self):
+        return str(self.date)
+
+========================================================
+
+2.steps to convert these classes into tables in SQLite Db
+
+Run the following three commands
+
+"python manage.py migrate"
+
+"python manage.py makemigrations [nameofdjangoapp]"
+
+"python manage.py migrate"
+
+=========================================================
+
+
+3.to interact with db
+
+
+"python manage.py shell"
+
+"from [nameofdjangoapp where you created models].models import [some model/class that you defined] "
+
+eg. from first_app.models import Topic
+
+
+*to get all the records for the table
+"[modelname].objects.all()"
+
+eg.Topic.objects.all()
+
+
+
+*to create a new record for that table
+
+eg.t=Topic(top_name="social network")
+
+
+*to save the record created
+
+t.save()
+
+==========================================
+
+4.To view models through admin interface we will have to register them with admin
+
+*register them in admins.py file
+
+import the models you would like to register
+admin.site.register([modelname])
+eg.
+
+from django.contrib import admin
+from .models import Topic,Webpage,AccessRecord
+# Register your models here.
+admin.site.register(Topic)
+admin.site.register(Webpage)
+admin.site.register(AccessRecord)
+
+
+
+===============================================
+
+5.creating super user
+
+*only a super user will have access to the admin interface
+
+"python manage.py createsuperuser"
+
+asks for username,email and password
