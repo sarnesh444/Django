@@ -1,7 +1,7 @@
 
 # Django
 
-![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
+![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)]
 
 ![alttext](https://twilio-cms-prod.s3.amazonaws.com/images/django-dark.width-808.png)
 
