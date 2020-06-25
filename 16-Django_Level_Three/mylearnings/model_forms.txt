@@ -1,0 +1,13 @@
+taking form input and passing it to the model
+
+1.instead of extending the forms.Forms class in forms.py file in which we create a django form
+
+since we would like to pass the forminput to a model so that it can be saved in db
+
+instead of inherting the forms.Forms class into our [FormName](userdefined class that has django form that we created) 
+we will inherit forms.ModelForm
+
+2.add inline class called meta gives information of connecting model to form
+	a.fields= __all__
+	b.fields= include
+	c.fields= exclude
