@@ -1,0 +1,44 @@
+1.in the app/urls.py assign
+
+"app_name=[nameofapp]"
+
+{# Must set the app_name=basic_app variable inside the basic_app/urls.py#}
+
+eg.
+app_name = 'basic_app'
+
+app_name=key word
+basic_app=name of the app
+
+=====================================
+
+2.in the html to use relative url
+
+<a href="{% url 'basic_app:other' %}">Link to other.html</a>
+
+url-it is a keyword
+
+
+basic_app-defined in urls.py
+should match the one defined in urls.py like the line below
+app_name = 'basic_app'
+
+
+
+other-it is a parameter for the name attribute in path 
+like the line below
+eg.path('other/',views.other,name='other'),
+
+
+now on clicking the anchor tag in html it will go to the  above line in basic_app/urls.py which will further re-direct to the "other" function in basic_app/views.py
+
+caution:to make sure no errors occur ensure that there are no spaces before or after in this string 'basic_app:other' 
+
+
+to link to the admins page using template taging
+"{% url 'admin:index' %}"
+
+to link to the index file
+works if you have defined a 'index' path in the project/urls.py 
+
+"{% url 'index' %}"

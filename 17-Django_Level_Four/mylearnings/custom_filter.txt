@@ -1,0 +1,60 @@
+1.create a folder "templatetags" in the base dir
+-----------------------------------
+2.create a new python file for custom filter for example "myextras.py"
+
+eg.
+from django import template
+register = template.Library()
+
+@register.filter
+def cutout(value, arg):
+    return value.replace(arg, '')
+
+
+
+register = template.Library() - to register the custom filter
+
+@register.filter - this indicates that the function below this line is a filter and django has to register it as a custom filter
+
+value, arg -takes two arguments,the job of the custom filter is that replaces arg in value with space
+
+-----------------------------------------------------------
+3.create the html file to use this custom filter
+
+eg.
+    {% extends "basic_app/base.html" %}
+    {% load my_extras %}
+
+    {% block body_block%}
+
+    <h1>Hello and welcome to the site!</h1>
+   
+    <h1>{{ text|cutout:"hello" }}</h1>
+
+    {% endblock %}
+
+
+
+{% load my_extras %} - loads the python file in which we have the custom filter
+
+
+{{ text|cutout:"hello" }} - as quoted above the custom filter cutout takes two arguments "val and arg" 
+here "val=text"(here text is just a placeholder and will be replaced by the dynamic text coming from views.py) and "arg=hello"
+
+
+
+------------------------------------------------------
+4.create views.py to return text to the filter
+
+
+eg,
+from django.shortcuts import render
+
+# Create your views here.
+def index(request):
+    context={'text':"hello world"}
+    return render(request,'basic_app/index.html', context)
+
+
+the "text"(placeholder) in html wil be replaced by "hello world"
+now custom filter takes val="hello world" and arg="hello" and returns "world"
