@@ -1,0 +1,127 @@
+from django.shortcuts import render
+from .forms import UserForm,UserProfileInfoForm  #importing django forms
+
+# Extra Imports for the Login and Logout Capabilities
+from django.contrib.auth import authenticate, login, logout  
+
+#authenticate-authenticates user by comparing supplied login credentials with the ones in the db
+#login- logsin the user
+#logout -logsout the user 
+
+from django.http import HttpResponseRedirect, HttpResponse
+
+#HttpResponseRedirect and reverse - redirects the user from current page to some other page
+
+from django.urls import reverse
+
+from django.contrib.auth.decorators import login_required
+
+#login_required - there are certain views in which it is essential for the user to be logged in for him to have access to it 
+
+# Create your views here.
+def index(request):
+    return render(request,'basic_app/index.html')
+
+@login_required   #specifies that the the user needs to be logged in inorder to have access to this page
+def special(request):
+    # Remember to also set login url in settings.py!
+    # LOGIN_URL = '/basic_app/user_login/'
+    return HttpResponse("You are logged in. Nice!")
+
+@login_required		#for the user to logout he must be first logged into the website,this ensures user to have access to the logout url only after a successful login
+def user_logout(request):
+    # Log out the user.
+    logout(request)    #logsout the user
+    # Return to homepage.
+    return HttpResponseRedirect(reverse('index'))   #on successful logut user will be redirected to the index page
+
+def register(request):
+
+    registered = False
+
+    if request.method == 'POST':
+
+        # Get info from "both" forms
+        # It appears as one form to the user on the .html page
+        user_form = UserForm(data=request.POST)      #creating the object for the UserForm offered by django admin
+        profile_form = UserProfileInfoForm(data=request.POST)	#creating the object for the UserInfoForm developed takes profile_url and profile_pic
+
+        # Check to see both forms are valid
+        if user_form.is_valid() and profile_form.is_valid():   #checks if both the forms are valid
+
+            # Save User Form to Database
+            user = user_form.save()
+
+            # Hashes the password
+            user.set_password(user.password)
+
+            # Update with Hashed password
+            user.save()
+
+            # Now we deal with the extra info!
+
+            # Can't commit yet because we still need to manipulate
+            profile = profile_form.save(commit=False)
+
+            # Set One to One relationship between
+            # UserForm and UserProfileInfoForm
+            profile.user = user
+
+            # Check if they provided a profile picture
+            if 'profile_pic' in request.FILES:
+                print('found it')
+                # If yes, then grab it from the POST form reply
+                profile.profile_pic = request.FILES['profile_pic']
+
+            # Now save model
+            profile.save()
+
+            # Registration Successful!
+            registered = True
+
+        else:
+            # One of the forms was invalid if this else gets called.
+            print(user_form.errors,profile_form.errors)
+
+    else:
+        # Was not an HTTP post so we just render the forms as blank.
+        user_form = UserForm()
+        profile_form = UserProfileInfoForm()
+
+    # This is the render and context dictionary to feed
+    # back to the registration.html file page.
+    return render(request,'basic_app/registration.html',
+                          {'user_form':user_form,
+                           'profile_form':profile_form,
+                           'registered':registered})
+
+def user_login(request):
+
+    if request.method == 'POST':
+        # First get the username and password supplied by the user through the html form 
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Django's built-in authentication function takes username and password credentials supplied by the user via html form and validates it against the record in db to check if the user info supplied is already present in the db i.e the user has already registered
+        user = authenticate(username=username, password=password)
+
+        # If we have a user found in the db and it matches with the credentials supplied
+        if user:
+            #Check it the account is active
+            if user.is_active:
+                # Log the user in.
+                login(request,user)
+                # Send the user back to some page.
+                # In this case their homepage.
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                # If account is not active:
+                return HttpResponse("Your account is not active.")
+        else:
+            print("Someone tried to login and failed.")
+            print("They used username: {} and password: {}".format(username,password))
+            return HttpResponse("Invalid login details supplied.")
+
+    else:
+        #Nothing has been provided for username or password.
+        return render(request, 'basic_app/login.html', {})

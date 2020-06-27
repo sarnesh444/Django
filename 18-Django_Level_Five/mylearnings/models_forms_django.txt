@@ -1,0 +1,109 @@
+1.if we login in to the admin page we see that we have users as a default provided by django so instead of creating the Users model from scratch we extend it by import
+
+"from django.contrib.auth.models import User"
+
+-------------------------------------------------------------
+2.create the User model in the models.py file 
+
+eg.
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class UserProfileInfo(models.Model):
+
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # Add any additional attributes you want that are not present in the default User of Django Admin
+    portfolio_site = models.URLField(blank=True)
+
+    profile_pic = models.ImageField(upload_to='basic_app/profile_pics',blank=True)
+
+    def __str__(self):
+        # Built-in attribute of django.contrib.auth.models.User !
+        return self.user.username
+
+
+
+explanation:
+-----------
+1."user = models.OneToOneField(User, on_delete=models.CASCADE)"
+
+Create relationship (don't inherit from User!)
+
+creating a one to one relationship with the default "User model offered by django admin" 
+
+UserProfileInfo-model class to add additional information that User model offered by django admin does not have it already has (Username,wmail,password) 
+so we add the additional info by establishing a one to one relationship inherting directly will cause database errors and does not allow multiple instances
+
+
+2."portfolio_site = models.URLField(blank=True)" - portfolio website of user, "blank=True" allows the user to skip this field
+
+3."profile_pic = models.ImageField(upload_to='basic_app/profile_pics',blank=True)" - profile pic if user wishes upload,
+upload_to='basic_app/profile_pics' - saves the image uploaded by user to media/basic_app/profile_pics images uploaded by users saved in this directory
+----------------------------------------------------------------------------------------------------------------
+
+3.creating django form from the above model
+
+
+eg.
+from django import forms
+from django.contrib.auth.models import User
+from .models import UserProfileInfo
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta():
+        model = User
+        fields = ('username','email','password')
+
+
+class UserProfileInfoForm(forms.ModelForm):
+    class Meta():
+        model = UserProfileInfo
+        fields = ('portfolio_site','profile_pic')
+
+
+
+explanation:
+-----------
+
+1."from django.contrib.auth.models import User" - importing User model offered by django admin
+
+2."from .models import UserProfileInfo" - importing the model(for db) created from models.py to generate a django form from the model imported
+
+3."class UserForm(forms.ModelForm)" - since we are creating the form from a model so we extend "forms.ModelForm" 
+this class is the Form for collecting user info from User model offered by django admin
+
+
+4."password = forms.CharField(widget=forms.PasswordInput())" over writing the existing field from User model offered by django admin 
+
+5."model = User" creating the object for User model offered by django admin 
+
+6."fields = ('username','email','password')" fields we use from User model offered by django admin 
+
+7."class UserProfileInfoForm(forms.ModelForm)"-since we are creating the form from a model so we extend "forms.ModelForm" 
+this class is the Form for collecting profile pic,url info from the model defined in models.py
+
+----------------------------------------------------------------------------------------------------------------
+
+4. registering the model created so as to able to view it in the admin interface
+
+
+eg.
+from django.contrib import admin
+from .models import UserProfileInfo, User
+
+admin.site.register(UserProfileInfo)
+
+----------------------------------------------------------------------------------------------------------------
+
+5. migrate the changes
+
+python manage.py migrate
+
+python manage.py makemigrations
+
+python manage.py
