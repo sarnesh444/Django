@@ -1,11 +1,9 @@
 
 # Django
 
-![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)
+![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)]
 
 ![alttext](https://twilio-cms-prod.s3.amazonaws.com/images/django-dark.width-808.png)
-
-![alttext](https://github.com/sarnesh444/Django/blob/master/Django%20Certificate%20UC-0820946d-0604-47ac-933d-1f882ac0ceab.pdf)
 
 This repo consists of the learning material of [Django](https://docs.djangoproject.com/en/3.0/).Django is a Python-based free and open-source web framework that follows the model-template-view architectural pattern.
 
