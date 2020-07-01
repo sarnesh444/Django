@@ -1,0 +1,74 @@
+1. Register the model in the admin.py
+
+eg.
+admin.site.register(model.Customer)
+
+
+2.Create SuperUser
+
+
+DJANGO TEMPLATES
+
+1.Create a dir templates and under that create a new dir admin
+
+2.inside admin dir create a new base_site.html
+copy the code from django github page
+
+3.Edit the template file as needed
+
+ORDERING THE FIELDS IN DJANGO
+
+1.Navigate to the admin.py in the django app
+
+2.create a new class to add the ordering fields
+naming convention "nameofthemodelAdmin" like MovieAdmin
+eg.
+class MovieAdmin(admin.ModelAdmin):
+	fields=['title','length','release year']
+
+SEARCH IN DJANGO ADMIN
+
+1.
+in the new class MovieAdmin add the search fields
+
+eg.
+class MovieAdmin(admin.ModelAdmin):
+	fields=['title','length','release year']
+	search_fields=['title']
+
+ADDING FILTERS
+
+1.
+in the new class MovieAdmin add the filter fields
+
+eg.
+class MovieAdmin(admin.ModelAdmin):
+	fields=['title','length','release year']
+	search_fields=['title']
+	list_filter=['release year'] (any fields of the model can be added here)
+
+
+VIEW ADDITIONAL FIELDS
+
+1.
+in the new class MovieAdmin add the view additional fields
+
+eg.
+class MovieAdmin(admin.ModelAdmin):
+	fields=['title','length','release year']
+	search_fields=['title']
+	list_filter=['release year'] (any fields of the model can be added here)
+	list_display=['title','length','release year']
+
+
+EDITING THE VALUES FROM THE ADMIN
+1.
+in the new class MovieAdmin add the edit fields
+
+eg.
+class MovieAdmin(admin.ModelAdmin):
+	fields=['title','length','release year']
+	search_fields=['title']
+	list_filter=['release year'] (any fields of the model can be added here)
+	list_display=['title','length','release year']
+	list_editable=['title','length','release year']
