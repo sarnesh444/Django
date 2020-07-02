@@ -1,0 +1,58 @@
+1.INSTALLATION
+
+pip install django-debug-toolbar
+
+2.navigate to settings.py
+
+under installed apps add the debug toolbar
+
+INSTALLED_APPS=[
+	'debug_toolbar',
+]
+
+move to MIDDLEWARE
+
+MIDDLEWARE=[
+	'debug_toolbar.middleware.DebugToolbarMiddleware'
+]
+
+
+INTERNAL_IPS = ['127.0.0.1']
+(makes sure debug toolbar works only for this domain)
+
+3.navigate to project/urls.py
+
+from django.conf import settings
+
+if settings.DEBUG:
+	import debug_toolbar
+	urlpatterns=[
+	path("/",include(debug_toolbar.urls))
+	]+urlpatterns
+
+
+DEBUG TOOLBAR
+
+has the following tabs
+
+1.versions - version of lang and lib being used
+
+2.time-time to load page
+
+3.setttings -settings.py file 
+
+4.headers - HTTP request headers
+
+5.request
+
+6.SQL - sql queries executed and the time taken for each of it to execute
+
+7.static file - info about static files
+
+8.cache
+
+9.templates
+
+10.signals
+
+11.log - logging messages
